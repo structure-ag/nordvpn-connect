@@ -1,0 +1,15 @@
+class _REGISTRY:
+    def _find_program(self, program):
+        nordKey = r"SOFTWARE\\NordSec\\InstalledProducts\\"
+        nordReg = reg.ConnectRegistry(None, reg.HKEY_LOCAL_MACHINE)
+
+        nordKey = reg.OpenKey(nordReg, nordKey)
+        for i in range(1024):
+            try:
+                nordsubkey_name = reg.EnumKey(nordKey, i)
+                nordsubkey = reg.OpenKey(nordKey, nordsubkey_name)
+                return(reg.QueryValueEx(nordsubkey, "InstallPath"))
+            except EnvironmentError:
+                pass
+                
+nordExe = (_REGISTRY()._find_program("NordVPN"))[0]
